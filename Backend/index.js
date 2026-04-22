@@ -1,32 +1,46 @@
 const express = require('express');
 const app = express();
-app.use(express.json()); // Para que el servidor entienda JSON
+const PORT = 3000;
 
-let tasks = []; // Aquí guardaremos las tareas temporalmente
+// Middleware para que el servidor pueda leer JSON en el cuerpo (body) de las peticiones
+app.use(express.json());
 
-// 2. Endpoint GET /tasks
+// Base de datos temporal (un array simple)
+let tareasMock = [
+    { id: 1, nombre: 'Aprender Express', completada: false }
+];
+
+// --- Endpoint GET /tasks ---
 app.get('/tasks', (req, res) => {
-    res.json(tasks);
+    res.json(tareas);
 });
 
-// 3. Endpoint POST /tasks
+// --- Endpoint POST /tasks ---
 app.post('/tasks', (req, res) => {
-    const { name } = req.body;
-    const newTask = { id: tasks.length + 1, name, completed: false };
-    tasks.push(newTask);
-    res.status(201).json(newTask);
+    const nuevaTarea = {
+        id: tareas.length + 1,
+        nombre: req.body.nombre,
+        completada: false
+    };
+    tareas.push(nuevaTarea);
+    res.status(201).json(nuevaTarea);
 });
 
-// 4. Endpoint PATCH /tasks/:id
+// --- Endpoint PATCH /tasks/:id ---
 app.patch('/tasks/:id', (req, res) => {
-    const { id } = req.params;
-    const task = tasks.find(t => t.id === parseInt(id));
-    if (task) {
-        task.completed = true;
-        res.json(task);
+    const id = parseInt(req.params.id);
+    const tarea = tareas.find(t => t.id === id);
+
+    if (tarea) {
+        tarea.completada = true;
+        res.json({ mensaje: "Tarea marcada como completada", tarea });
     } else {
-        res.status(404).send('Tarea no encontrada');
+        res.status(404).json({ mensaje: "No encontré esa tarea" });
     }
 });
 
-app.listen(3000, () => console.log('Servidor corriendo en http://localhost:3000'));
+// Iniciar el servidor
+//Extiende de PORT inicializado al inicio
+app.listen(PORT, () => {
+    console.log(`Servidor escuchando en http://localhost:${PORT}`);
+});
