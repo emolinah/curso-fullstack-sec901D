@@ -1,62 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestor de Tareas</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
     <h1>Gestor de Tareas</h1>
-
-    <form id="task-form">
-      <input
-        type="text"
-        id="task-input"
-        placeholder="Escribe una tarea..."
-        autocomplete="off"
-        required
-      />
-      <button type="submit">Agregar</button>
+    <form id="taskForm">
+        <input name="title" id="taskInput" placeholder="Nueva tarea..." required>
+        <button type="submit">Agregar</button>
     </form>
-
-    <ul id="task-list"></ul>
-  </div>
-
-  <script>
-    const form = document.getElementById('task-form');
-    const input = document.getElementById('task-input');
-    const list = document.getElementById('task-list');
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const text = input.value.trim();
-      if (!text) return;
-      addTask(text);
-      input.value = '';
-      input.focus();
-    });
-
-    function addTask(text) {
-      const li = document.createElement('li');
-      li.className = 'task-item';
-
-      const span = document.createElement('span');
-      span.textContent = text;
-      span.addEventListener('click', () => {
-        li.classList.toggle('completed');
-      });
-
-      const btn = document.createElement('button');
-      btn.textContent = '✕';
-      btn.className = 'delete-btn';
-      btn.addEventListener('click', () => li.remove());
-
-      li.appendChild(span);
-      li.appendChild(btn);
-      list.appendChild(li);
-    }
-  </script>
+    <ul id="taskList"></ul>
+    <script src="app.js"></script>
 </body>
 </html>
